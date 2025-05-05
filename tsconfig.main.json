@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",             // مستوى JS الناتج
+      "module": "CommonJS",           // Electron Main يعمل على CommonJS
+      "outDir": "dist/main",          // مكان إخراج الملفات المترجمة
+      "rootDir": "electron",          // مسار ملفات المصدر
+      "esModuleInterop": true,
+      "strict": true,
+      "sourceMap": true
+    },
+    "include": ["electron/**/*.ts"]   // كل ملفات Electron/Main
+  }
+  
