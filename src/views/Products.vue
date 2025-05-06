@@ -30,6 +30,7 @@
     if (onlineStatus) {
       store.dispatch('products/fetchProducts'); // جلب البيانات من الـ API
     } else {
+      store.dispatch('products/fetchProducts');
       console.log('لا يوجد اتصال بالإنترنت');
     }
   };

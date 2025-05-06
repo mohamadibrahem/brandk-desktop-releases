@@ -1,4 +1,6 @@
+// src/store/modules/products.ts
 import http from '@/api/http';
+import { getOfflineProducts, saveProductOffline, clearOfflineProducts } from '@/services/localDB';
 
 // types
 export interface Product {
@@ -40,15 +42,23 @@ const actions = {
   async fetchProducts({ commit, state }: any) {
     commit('setLoading', true);
     commit('setError', null);
-
+  
     try {
       if (state.isOnline) {
-        // جلب البيانات من API باستخدام axios أو مكتبة http الخاصة بك
         const response = await http.get('/products');
-        // إذا كانت البيانات موجودة في response.data (باستخدام axios)
-        commit('setProducts', response.data.data); 
+        const products = response.data.data;
+  
+        commit('setProducts', products);
+  
+        await clearOfflineProducts(); // امسح التخزين القديم
+        for (const product of products) {
+          await saveProductOffline(product); // خزّن كل منتج
+        }
       } else {
-        commit('setError', 'أنت غير متصل بالإنترنت');
+        const offlineProducts = await getOfflineProducts();
+        console.log('📦 تم تحميل المنتجات من IndexedDB:', offlineProducts);
+        commit('setProducts', offlineProducts);
+        commit('setError', 'تم عرض البيانات من التخزين المحلي');
       }
     } catch (e: any) {
       commit('setError', e.message || 'خطأ في جلب البيانات');

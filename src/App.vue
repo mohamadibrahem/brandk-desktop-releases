@@ -15,7 +15,7 @@
   import router from './router'
   
   onMounted(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('brandk_token')
     if (!token && router.currentRoute.value.path !== '/login') {
       router.push('/login')
     }

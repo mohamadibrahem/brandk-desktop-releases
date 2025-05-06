@@ -38,13 +38,20 @@ const router = createRouter({
 
   router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('brandk_token');
-    const userRole = localStorage.getItem('user_role') || 'admin'; // دور المستخدم، مثل 'admin' أو 'user'
-  
+
     if (to.meta.requiresAuth && !token) {
+      // المستخدم يحاول الدخول إلى صفحة تتطلب توثيق بدون وجود توكن
+      console.log('🚫 محاولة دخول بدون توكن، تحويل إلى /login');
       next({ name: 'Login' });
+    } else if (!to.meta.requiresAuth && token && to.name === 'Login') {
+      // إذا كان المستخدم موثق بالفعل ويحاول فتح صفحة تسجيل الدخول
+      console.log('🔁 المستخدم موثق ويحاول الدخول لصفحة تسجيل الدخول، إعادة توجيه إلى /');
+      next({ name: 'Home' });
     } else {
+      // حالة المرور العادي
+      console.log(`✅ المرور إلى ${to.name}`);
       next();
     }
-  });
+  });  
   
   export default router;
