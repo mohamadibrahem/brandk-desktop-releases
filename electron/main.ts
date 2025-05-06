@@ -2,6 +2,8 @@ import { app, BrowserWindow } from 'electron';
 
 let win: BrowserWindow | null;
 
+console.log('🚀 main.ts: Electron بدأ العمل');
+
 function createWindow() {
   win = new BrowserWindow({
     width: 800,

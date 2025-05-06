@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 let win;
+console.log('🚀 main.ts: Electron بدأ العمل');
 function createWindow() {
     win = new electron_1.BrowserWindow({
         width: 800,

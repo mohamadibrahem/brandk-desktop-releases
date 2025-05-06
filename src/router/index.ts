@@ -9,7 +9,7 @@ const routes = [
       path: '/login',  
       name: 'Login',  
       component: Login,
-      meta: { requiresAuth: false, role: 'user'} // لا حاجة لتوثيق الدخول لهذه الصفحة
+      meta: { requiresAuth: false, role: 'admin'} // لا حاجة لتوثيق الدخول لهذه الصفحة
     },
     { 
       path: '/',       
@@ -42,9 +42,6 @@ const router = createRouter({
   
     if (to.meta.requiresAuth && !token) {
       next({ name: 'Login' });
-    } else if (to.meta.role && to.meta.role !== userRole) {
-      // التحقق من الدور المناسب للوصول إلى الصفحة
-      next({ name: 'Home' }); // إعادة توجيه إذا كان الدور غير مناسب
     } else {
       next();
     }
