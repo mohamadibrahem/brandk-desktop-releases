@@ -6,6 +6,7 @@ import { getOfflineProducts, saveProductOffline, clearOfflineProducts } from '@/
 export interface Product {
   id: number;
   product_name: string;
+  sku: string;
   price: number;
 }
 

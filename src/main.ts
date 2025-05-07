@@ -4,13 +4,24 @@ import App from './App.vue';
 import store from './store';  // استيراد Vuex Store
 import router from './router';  // استيراد Vue Router
 
-// استيراد Bootstrap CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
 // استيراد BootstrapVue
 import { BootstrapVue3 } from 'bootstrap-vue-3';
 
+// 1️⃣ import the scanner components by name
+import {
+    QrcodeStream,
+    QrcodeDropZone,
+    QrcodeCapture
+  } from 'vue-qrcode-reader';
+  
 const app = createApp(App);
+// 2️⃣ register each one globally
+app.component('QrcodeStream',    QrcodeStream)
+app.component('QrcodeDropZone',  QrcodeDropZone)
+app.component('QrcodeCapture',   QrcodeCapture)
 
 app.use(store);   // ربط Vuex
 app.use(router);  // ربط Vue Router

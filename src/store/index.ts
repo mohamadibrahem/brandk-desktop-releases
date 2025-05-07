@@ -3,10 +3,14 @@ import { createStore } from 'vuex';
 import http from '@/api/http';  // استيراد إعدادات axios الخاصة بك
 import router from '@/router';
 import products from './modules/products';
+import coupons from './modules/coupons';
+import sales from './modules/sales';
 
 export default createStore({
     modules: {
         products,
+        coupons,
+        sales
     },
     state: {
       domain: localStorage.getItem('brandk_domain') || null,

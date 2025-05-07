@@ -3,6 +3,8 @@ import Login  from '@/views/Login.vue';
 import Home   from '@/views/Home.vue';
 import Orders from '@/views/Orders.vue';
 import Products from '@/views/Products.vue';
+import Sales from '@/views/Sales.vue';
+import Coupons from '@/views/Coupons.vue';
 
 const routes = [
     { 
@@ -29,6 +31,18 @@ const routes = [
         component: Products,
         meta: { requiresAuth: true, role: 'admin' } // هذه الصفحة تتطلب توثيق الدخول
     },
+    { 
+      path: '/sales', 
+      name: 'Sales', 
+      component: Sales,
+      meta: { requiresAuth: true, role: 'admin' }
+    },
+    { 
+      path: '/coupons', 
+      name: 'Coupons', 
+      component: Coupons,
+      meta: { requiresAuth: true, role: 'admin' }
+    }
   ];
 
 const router = createRouter({
