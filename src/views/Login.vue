@@ -11,7 +11,8 @@ const password = ref('12345678');
 const domain = ref('demo.brandk.project');
 const error = ref('');
 
-const login = async () => {
+const login = async (e) => {
+  e.preventDefault();
   error.value = '';
   try {
     await store.dispatch('login', { domain: domain.value, email: email.value, password: password.value });
@@ -27,11 +28,13 @@ const login = async () => {
   <div class="login-container">
     <h2>تسجيل الدخول</h2>
 
-    <input v-model="domain" placeholder="الدومين" />
-    <input v-model="email" placeholder="البريد الإلكتروني" />
-    <input v-model="password" type="password" placeholder="كلمة المرور" />
+    <form @submit="login">
+      <input v-model="domain" placeholder="الدومين" />
+      <input v-model="email" placeholder="البريد الإلكتروني" />
+      <input v-model="password" type="password" placeholder="كلمة المرور" autocomplete="current-password"/>
     
-    <button @click="login">تسجيل الدخول</button>
+      <button type="submit">تسجيل الدخول</button>
+    </form>
 
     <p v-if="error" class="error">{{ error }}</p>
   </div>

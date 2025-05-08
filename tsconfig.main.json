@@ -6,7 +6,8 @@
       "rootDir": "electron",          // مسار ملفات المصدر
       "esModuleInterop": true,
       "strict": true,
-      "sourceMap": true
+      "sourceMap": true,
+      "skipLibCheck": true
     },
     "include": ["electron/**/*.ts"]   // كل ملفات Electron/Main
   }

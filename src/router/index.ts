@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login  from '@/views/Login.vue';
-import Home   from '@/views/Home.vue';
+import Dashboard   from '@/views/Dashboard.vue';
 import Orders from '@/views/Orders.vue';
 import Products from '@/views/Products.vue';
 import Sales from '@/views/Sales.vue';
@@ -15,8 +15,8 @@ const routes = [
     },
     { 
       path: '/',       
-      name: 'Home',   
-      component: Home,
+      name: 'Dashboard',   
+      component: Dashboard,
       meta: { requiresAuth: true, role: 'admin' } // هذه الصفحة تتطلب توثيق الدخول
     },
     { 
@@ -51,21 +51,19 @@ const router = createRouter({
   });
 
   router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('brandk_token');
-
-    if (to.meta.requiresAuth && !token) {
-      // المستخدم يحاول الدخول إلى صفحة تتطلب توثيق بدون وجود توكن
-      console.log('🚫 محاولة دخول بدون توكن، تحويل إلى /login');
-      next({ name: 'Login' });
-    } else if (!to.meta.requiresAuth && token && to.name === 'Login') {
-      // إذا كان المستخدم موثق بالفعل ويحاول فتح صفحة تسجيل الدخول
-      console.log('🔁 المستخدم موثق ويحاول الدخول لصفحة تسجيل الدخول، إعادة توجيه إلى /');
-      next({ name: 'Home' });
+    const token = localStorage.getItem('brandk_token')
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  
+    if (requiresAuth && !token) {
+      console.log('🚫 محاولة دخول بدون توكن، تحويل إلى /login')
+      next({ name: 'Login' })
+    } else if (to.path === '/login' && token) {
+      console.log('🔁 المستخدم موثق ويحاول الدخول لصفحة تسجيل الدخول، إعادة توجيه إلى /')
+      next({ name: 'Dashboard' }) // أو 'Home' حسب ما تسمي صفحتك
     } else {
-      // حالة المرور العادي
-      console.log(`✅ المرور إلى ${to.name}`);
-      next();
+      console.log(`✅ المرور إلى ${to.name}`)
+      next()
     }
-  });  
+  })   
   
   export default router;

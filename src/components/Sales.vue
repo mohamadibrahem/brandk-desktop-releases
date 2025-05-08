@@ -1,5 +1,13 @@
 <template>
-    <div class="container my-4">
+    <div class="pagetitle">
+      <h1>لوحة التحكم</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">إضافة فاتورة</li>
+        </ol>
+      </nav>
+    </div>
+    <section class="section">
       <div class="alert alert-info" v-if="isOffline" variant="warning" show>
         <p>أنت الآن في وضع أوفلاين، سيتم حفظ المبيعات محليًا حتى توفر الاتصال بالإنترنت.</p>
       </div>
@@ -142,7 +150,7 @@
           إتمام البيع
         </b-button>
       </b-card>
-    </div>
+    </section>
   </template>
   
   <script lang="ts">
