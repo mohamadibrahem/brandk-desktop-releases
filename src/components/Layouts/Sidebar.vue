@@ -135,10 +135,6 @@
   </script>
   
   <style scoped>
-  .nav-link.active {
-    background-color: #f0f0f0;
-    font-weight: bold;
-    color: #0d6efd;
-  }
+
   </style>
   

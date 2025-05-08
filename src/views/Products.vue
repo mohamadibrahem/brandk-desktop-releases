@@ -12,29 +12,35 @@
     <b-alert v-if="error" variant="danger" show>
       {{ error }}
     </b-alert>
-
+    
     <!-- عرض المنتجات -->
-    <b-row v-if="Array.isArray(products) && products.length">
+    <b-row v-if="Array.isArray(products) && products.length" class="justify-content-start">
       <b-col
         v-for="product in products"
         :key="product.id"
-        cols="12" md="6" lg="4"
+        cols="12" md="6" lg="4" xl="3"
         class="mb-4"
       >
         <b-card :title="product.product_name" class="h-100">
-          <b-img
-            v-if="product.photo && product.photo.length > 0"
-            :src="product.photo[0].url"
-            :alt="product.product_name"
-            fluid
-            class="mb-3"
-            style="max-height: 150px; object-fit: cover;"
-          ></b-img>
-          <p class="product-info">
-            <span class="original-price" v-if="product.discount_price > 0">{{ product.price }} - </span>
-            <span class="discount-price">{{ (product.price - product.discount_price) }}</span> 
-            <span class="sku" v-if="product.sku">SKU: {{ product.sku }}</span>
-          </p>
+          <b-row class="align-items-center">
+            <b-col sm="4">
+              <b-img
+                v-if="product.photo && product.photo.length > 0"
+                :src="product.photo[0].url"
+                :alt="product.product_name"
+                fluid
+                class="mb-3"
+                style="max-height: 150px; object-fit: cover;"
+              ></b-img>
+            </b-col>
+            <b-col sm="8">
+              <p class="product-info">
+                <span class="original-price" v-if="product.discount_price > 0">{{ product.price }} - </span>
+                <span class="discount-price">{{ (product.price - product.discount_price) }}</span> 
+                <span class="sku" v-if="product.sku">SKU: {{ product.sku }}</span>
+              </p>
+            </b-col>
+          </b-row>
         </b-card>
       </b-col>
     </b-row>
@@ -88,13 +94,6 @@ const updateProducts = () => {
 </script>
 
 <style scoped>
-.product-info {
-  font-size: 1.2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
 
 .original-price {
   font-weight: bold;

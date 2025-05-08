@@ -5,6 +5,7 @@ import Orders from '@/views/Orders.vue';
 import Products from '@/views/Products.vue';
 import Sales from '@/views/Sales.vue';
 import Coupons from '@/views/Coupons.vue';
+import NotFound from '@/components/NotFound.vue';
 
 const routes = [
     { 
@@ -42,6 +43,11 @@ const routes = [
       name: 'Coupons', 
       component: Coupons,
       meta: { requiresAuth: true, role: 'admin' }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFound
     }
   ];
 

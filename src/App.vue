@@ -42,6 +42,5 @@ onMounted(() => {
 </script>
 
 <style>
-@import 'bootstrap-icons/font/bootstrap-icons.css';
-@import '@/assets/css/style.css';
+
 </style>

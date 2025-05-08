@@ -3,8 +3,8 @@
     <header class="header fixed-top d-flex align-items-center" id="header">
       <div class="d-flex align-items-center justify-content-between">
         <RouterLink class="logo d-flex align-items-center" to="/">
-          <img src="@/assets/img/logo.png" alt="Logo" />
-          <span class="d-none d-lg-block">NiceAdmin</span>
+          <img src="@/assets/img/logo-brandk.png" alt="Logo" />
+          <span class="d-none d-lg-block">BRANDK ONLINE</span>
         </RouterLink>
         <i class="bi bi-list toggle-sidebar-btn"></i>
       </div>

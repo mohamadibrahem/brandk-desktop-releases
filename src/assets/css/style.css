@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Tajawal";
+  src: url("@/assets/fonts/tajawal.ttf") format("truetype");
+}
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -6,7 +11,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Tajawal", sans-serif;
   background: #f6f9ff;
   color: #444444;
 }

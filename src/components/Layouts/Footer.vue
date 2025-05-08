@@ -2,7 +2,7 @@
 <template>
   <footer id="footer" class="footer">
     <div class="text-center">
-      &copy; {{ new Date().getFullYear() }} <strong><span>NiceAdmin</span></strong>. جميع الحقوق محفوظة.
+        {{ new Date().getFullYear() }} <strong><span>BRANDK-ONLINE</span> &copy; </strong>. جميع الحقوق محفوظة.
     </div>
   </footer>
 </template>
