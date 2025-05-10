@@ -1,19 +1,21 @@
 {
-  "name": "brandk-electron",
+  "name": "brandk-online",
   "version": "1.0.0",
+  "description": "Brandk Desktop App for Online Selling",
+  "author": "brandk-online",
   "main": "dist/main/main.js",
   "scripts": {
     "build:main": "tsc -p tsconfig.main.json",
     "dev": "vite",
     "start": "npm run build:main && electron .",
-    "build": "vite build"
+    "build": "npm run build:main && vite build",
+    "dist": "npm run build:main && vite build && electron-builder"
   },
   "dependencies": {
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.12.1",
     "bootstrap-vue-3": "^0.5.1",
-    "electron": "^24.0.0",
     "idb": "^8.0.2",
     "vue": "^3.5.13",
     "vue-qrcode-reader": "^5.7.2",
@@ -21,13 +23,38 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "electron": "^24.0.0",
     "@vitejs/plugin-vue": "^4.6.2",
+    "electron-builder": "^26.0.12",
+    "electron-updater": "^6.6.2",
     "typescript": "^4.9.5",
     "vite": "^5.0.0"
   },
   "build": {
+    "appId": "com.brandk.online",
+    "productName": "BrandK Online",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/",
+      "dist/main/main.js"
+    ],
     "extraResources": [
       "src/assets/img/logo_brandk_icon.ico"
-    ]
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "your-github-username",
+        "repo": "your-repo-name"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    }
   }
 }

@@ -38,6 +38,20 @@ onMounted(() => {
   initTooltips()
   initScrollTop()
   //initGLightbox()
+
+  if (window.electronAPI) {
+    window.electronAPI.onUpdateAvailable(() => {
+      // هنا يمكن إظهار تنبيه للمستخدم
+      alert('🔥 تحديث جديد متاح! سيتم تحميله تلقائيًا.');
+    });
+
+    window.electronAPI.onUpdateDownloaded(() => {
+      const restart = confirm('✅ تم تحميل التحديث. هل تريد إعادة التشغيل الآن؟');
+      if (restart) {
+        window.electronAPI.restartApp();
+      }
+    });
+  }
 })
 </script>
 
