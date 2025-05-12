@@ -2,9 +2,16 @@
   <div class="container mt-4">
     <h2 class="mb-3">الطلبات</h2>
 
-    <b-button variant="primary" @click="loadOrders" :disabled="loading">
-      {{ loading ? 'جاري التحميل...' : 'جلب الطلبات' }}
-    </b-button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <b-button variant="primary" @click="loadOrders" :disabled="loading">
+        {{ loading ? 'جاري التحميل...' : 'جلب الطلبات' }}
+      </b-button>
+      <b-form-input
+        v-model="searchTerm"
+        placeholder="ابحث في الطلبات..."
+        class="w-25"
+      />
+    </div>
 
     <b-alert v-if="error" variant="danger" class="mt-3" dismissible>
       {{ error }}
@@ -12,13 +19,12 @@
 
     <b-table
       v-else
-      :items="orders"
+      :items="filteredOrders"
       :fields="fields"
       responsive
       striped
       hover
-      class="mt-3"
-    >
+      class="mt-3">
       <template #cell(status)="data">
         <span :class="statusClass(data.item.status)">
           {{ statusLabel(data.item.status) }}
@@ -32,16 +38,35 @@
       <template #cell(final_sum)="data">
         {{ data.item.final_sum }}
       </template>
+
+      <template #cell(id)="data">
+        <b-button variant="primary" @click="viewInvoice(data.item)">
+          عرض التفاصيل
+        </b-button>
+      </template>
+
     </b-table>
+
+    <p v-if="!loading && filteredOrders.length === 0" class="text-center text-muted mt-3">
+      لا توجد طلبات مطابقة للبحث.
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useOrders } from '@/composables/useOrders';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
+const store = useStore();
+const router = useRouter();
 const { orders, loading, error, loadOrders } = useOrders();
 
+// مصطلح البحث
+const searchTerm = ref('');
+
+// حقول الجدول
 const fields = [
   { key: 'id', label: 'رقم الطلب' },
   { key: 'order_code', label: 'معرف الطلب' },
@@ -53,31 +78,46 @@ const fields = [
   { key: 'created_at', label: 'تاريخ الإنشاء' },
 ];
 
+// تصفية الطلبات حسب البحث
+const filteredOrders = computed(() => {
+  const term = searchTerm.value.trim().toLowerCase();
+  if (!term) return orders.value;
+  return orders.value.filter(o => {
+    return [
+      o.id?.toString(),
+      o.order_code,
+      o.user,
+      o.store,
+      o.branch,
+      o.status
+    ].some(field =>
+      field?.toLowerCase().includes(term)
+    );
+  });
+});
+
+// دالة عرض التفاصيل
+function viewInvoice(item: any) {
+  store.dispatch('invoice/setInvoice', item);
+  router.push({ name: 'InvoicePage', params: { id: item.id } });
+}
+
+// تنسيقات المكونات المساعدة
 const statusLabel = (status: string) => {
   switch (status) {
-    case 'PENDING':
-      return 'قيد المعالجة';
-    case 'COMPLETED':
-      return 'تم التوصيل';
-    case 'CANCELLED':
-      return 'ملغي';
-    default:
-      return 'غير معروف';
+    case 'PENDING': return 'قيد المعالجة';
+    case 'COMPLETED': return 'تم التوصيل';
+    case 'CANCELLED': return 'ملغي';
+    default: return 'غير معروف';
   }
 };
 
-const statusClass = (status: string) => {
-  return {
-    'text-warning': status === 'PENDING',
-    'text-success': status === 'COMPLETED',
-    'text-danger': status === 'CANCELLED',
-    'text-muted': !['PENDING', 'COMPLETED', 'CANCELLED'].includes(status),
-  };
-};
+const statusClass = (status: string) => ({
+  'text-warning': status === 'PENDING',
+  'text-success': status === 'COMPLETED',
+  'text-danger': status === 'CANCELLED',
+  'text-muted': !['PENDING','COMPLETED','CANCELLED'].includes(status),
+});
 
-const formatDate = (dateString: string) => {
-  const date = dateString;
-  return date;
-};
-
+const formatDate = (dateString: string) => dateString;
 </script>

@@ -8,8 +8,12 @@
       "skipLibCheck": true,
       "jsx": "preserve",
       "baseUrl": ".",
-      "paths": { "@/*": ["src/*"] }
+      "paths": { "@/*": ["src/*"] },
+      "typeRoots": [
+        "./node_modules/@types",
+        "./src/types"
+      ]
     },
-    "include": ["src/**/*", "electron/**/*"]
+    "include": ["src/**/*", "electron/**/*","src/types/**/*.d.ts"]
   }
   

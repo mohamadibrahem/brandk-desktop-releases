@@ -16,19 +16,24 @@
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.12.1",
     "bootstrap-vue-3": "^0.5.1",
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-console": "^3.0.0-alpha.2",
+    "escpos-usb": "^3.0.0-alpha.4",
     "idb": "^8.0.2",
+    "pdfkit": "^0.17.1",
     "vue": "^3.5.13",
     "vue-qrcode-reader": "^5.7.2",
     "vue-router": "^4.5.1",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "electron": "^24.0.0",
     "@vitejs/plugin-vue": "^4.6.2",
+    "electron": "^24.0.0",
     "electron-builder": "^26.0.12",
     "electron-updater": "^6.6.2",
     "typescript": "^4.9.5",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "vite-plugin-static-copy": "^3.0.0"
   },
   "build": {
     "appId": "com.brandk.online",
@@ -41,7 +46,12 @@
       "dist/main/main.js"
     ],
     "extraResources": [
-      "src/assets/img/logo_brandk_icon.ico"
+      "src/assets/img/logo_brandk_icon.ico",
+      {
+        "from": "src/assets/fonts",
+        "to": "assets/fonts",
+        "filter": ["**/*.ttf"]
+      }
     ],
     "publish": [
       {
@@ -51,7 +61,15 @@
       }
     ],
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "src/assets/img/logo_brandk_icon.ico",
+      "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true,
+        "perMachine": true,
+        "allowElevation": true,
+        "runLevel": "highestAvailable"
+      }
     },
     "mac": {
       "target": "dmg"

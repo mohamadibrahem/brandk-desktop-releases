@@ -5,12 +5,14 @@ import router from '@/router';
 import products from './modules/products';
 import coupons from './modules/coupons';
 import sales from './modules/sales';
+import invoiceStore from './modules/invoiceStore';
 
 export default createStore({
     modules: {
         products,
         coupons,
-        sales
+        sales,
+        invoice: invoiceStore,
     },
     state: {
       domain: localStorage.getItem('brandk_domain') || null,

@@ -10,6 +10,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import '@/assets/css/style.css';
 import '@/assets/css/rtl.css';
 
+window.addEventListener('online', () => {
+  console.log('🔄 تم استعادة الاتصال بالإنترنت. جاري مزامنة المبيعات...');
+  store.dispatch('sales/syncOfflineSales');
+});
+
 // استيراد BootstrapVue
 import { BootstrapVue3 } from 'bootstrap-vue-3';
 

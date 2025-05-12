@@ -6,6 +6,7 @@ import Products from '@/views/Products.vue';
 import Sales from '@/views/Sales.vue';
 import Coupons from '@/views/Coupons.vue';
 import NotFound from '@/components/NotFound.vue';
+import InvoicePage from '@/views/InvoicePage.vue';
 
 const routes = [
     { 
@@ -42,6 +43,13 @@ const routes = [
       path: '/coupons', 
       name: 'Coupons', 
       component: Coupons,
+      meta: { requiresAuth: true, role: 'admin' }
+    },
+    { 
+      path: '/invoice/printer/:id', 
+      name: 'InvoicePage', 
+      component: InvoicePage,
+      props: true,
       meta: { requiresAuth: true, role: 'admin' }
     },
     {

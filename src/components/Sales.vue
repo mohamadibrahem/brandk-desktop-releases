@@ -279,17 +279,30 @@
   
       const submitSale = async () => {
         try {
-          await store.dispatch('sales/submitSale', {
-            items: cart.value,
+          // تأكيد وجود عناصر في السلة
+          if (!cart.value || cart.value.length === 0) {
+            throw new Error('سلة الشراء فارغة');
+          }
+
+          const result = await store.dispatch('sales/submitSale', {
+            items: JSON.parse(JSON.stringify(cart.value)), // نسخة عميقة
             coupon: appliedCoupon.value?.code || null,
-          })
-          alert(isOffline.value ? 'تم حفظ المبيعات محليًا' : 'تم إتمام البيع بنجاح')
-          cart.value = []
-          appliedCoupon.value = null
-        } catch {
-          alert('حدث خطأ أثناء إرسال الطلب')
+          });
+
+          alert(isOffline.value ? 'تم الحفظ محلياً بنجاح' : 'تم إتمام البيع');
+          cart.value = [];
+          appliedCoupon.value = null;
+        } catch (error) {
+          console.error('تفاصيل الخطأ:', error);
+          
+          let errorMessage = 'حدث خطأ أثناء إرسال الطلب';
+          if (error instanceof Error) {
+            errorMessage = error.message || errorMessage;
+          }
+          
+          alert(errorMessage);
         }
-      }
+      };
   
       const scanQRCode = () => {
         alert('يرجى استخدام مكتبة QR لتمكين هذه الميزة.')
