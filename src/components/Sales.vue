@@ -149,6 +149,9 @@
         >
           إتمام البيع
         </b-button>
+        <b-button class="mt-4" :disabled="cart.length === 0" variant="primary" @click="viewInvoice">
+          حفظ + طباعة
+        </b-button>
       </b-card>
     </section>
   </template>
@@ -156,6 +159,8 @@
   <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
   import { useStore } from 'vuex'
+  import { useRouter } from 'vue-router';
+  
   import {
     calculateDiscounts,
     // you can also import individual utilities if needed
@@ -169,7 +174,8 @@
   export default defineComponent({
     name: 'SalePage',
     setup() {
-      const store = useStore()
+      const store = useStore();
+      const router = useRouter();
   
       const sku = ref('')
       const product = ref<Product | null>(null)
@@ -276,6 +282,35 @@
       const applyCoupon = (cup: any) => {
         appliedCoupon.value = cup
       }
+
+      const viewInvoice = async () => {
+        try {
+          // التأكد من إرسال البيانات بشكل بسيط (مصفوفات أو كائنات تحتوي على نصوص وأرقام فقط)
+          const payload = {
+              id: totals.value.id || 1,
+              store: totals.value.store?.name || 'اسم المتجر',
+              branch: totals.value.branch?.name || 'الفرع',
+              user: totals.value.user?.name || 'العميل',
+              order_code: totals.value.order_code || '',
+              created_at: totals.value.created_at || new Date().toLocaleDateString('ar-EG'),  // تاريخ الفاتورة
+              customer_requests: cart.value.map(item => ({
+                product: {
+                  product_name: item.product_name || 'منتج غير محدد',
+                },
+                quantity: item.quantity || 0,  // الكمية
+                price: item.price || 0,  // السعر
+              })),
+              subtotal: totals.value.originalTotal,
+              total_discount: totals.value.productDiscounts,
+              coupon_discount: totals.value.couponDiscount,
+              final_sum: totals.value.finalTotal,
+          };
+          store.dispatch('invoice/setInvoice', payload); // تخزين الفاتورة في Vuex
+          router.push({ name: 'InvoicePage', params: { id: 0 } }); // التوجيه لصفحة الفاتورة
+        } catch (error) {
+          console.error(error);
+        }
+      }
   
       const submitSale = async () => {
         try {
@@ -284,14 +319,31 @@
             throw new Error('سلة الشراء فارغة');
           }
 
-          const result = await store.dispatch('sales/submitSale', {
-            items: JSON.parse(JSON.stringify(cart.value)), // نسخة عميقة
-            coupon: appliedCoupon.value?.code || null,
-          });
+          // بيانات البيع التي سيتم إرسالها
+          const saleData = {
+            items: JSON.parse(JSON.stringify(cart.value)), // نسخة عميقة من سلة الشراء
+            coupon: appliedCoupon.value || null, // الكوبون
+            totals: {
+              originalTotal: totals.value.originalTotal,
+              productDiscounts: totals.value.productDiscounts,
+              couponDiscount: totals.value.couponDiscount,
+              finalTotal: totals.value.finalTotal,
+            },
+          };
+
+          // إرسال البيانات إلى Vuex أو API
+          const result = await store.dispatch('sales/submitSale', saleData);
 
           alert(isOffline.value ? 'تم الحفظ محلياً بنجاح' : 'تم إتمام البيع');
+          
+          // مسح البيانات بعد البيع
           cart.value = [];
           appliedCoupon.value = null;
+          totals.originalTotal = 0;
+          totals.productDiscounts = 0;
+          totals.couponDiscount = 0;
+          totals.finalTotal = 0;
+
         } catch (error) {
           console.error('تفاصيل الخطأ:', error);
           
@@ -314,6 +366,7 @@
       onMounted(fetchData)
   
       return {
+        viewInvoice,
         showScanner,
         scannerActive,
         onModalHidden,

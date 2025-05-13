@@ -2,14 +2,16 @@
 import { openDB } from 'idb';
 import type { Product } from '@/store/modules/products';
 import type { Coupon } from '@/store/modules/coupons';
+import type { Order } from '@/store/modules/orders';
 
 const DB_NAME = 'brandk-db';
 const STORE_NAME_PRODUCTS = 'offline-products';
 const STORE_NAME_COUPONS = 'offline-coupons';
 const STORE_NAME_SALES = 'offline-sales';
+const STORE_NAME_ORDERS = 'offline-orders';
 
 export async function getDB() {
-  return openDB(DB_NAME, 3, {
+  return openDB(DB_NAME, 4, {
     upgrade(db) {
       if (!db.objectStoreNames.contains(STORE_NAME_PRODUCTS)) {
         db.createObjectStore(STORE_NAME_PRODUCTS, { keyPath: 'id' });
@@ -19,6 +21,9 @@ export async function getDB() {
       }
       if (!db.objectStoreNames.contains(STORE_NAME_SALES)) {
         db.createObjectStore(STORE_NAME_SALES, {keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains(STORE_NAME_ORDERS)) {
+        db.createObjectStore(STORE_NAME_ORDERS, { keyPath: 'id' });
       }
     },
   });
@@ -64,16 +69,18 @@ interface Sale {
   id?: number; // جعله اختياريًا لأن الـ ID سيتولد تلقائيًا
   items: Product[];
   coupon: string | null;
+  totals: any;
   timestamp: number;
 }
 
 export async function saveSaleOffline(sale: Omit<Sale, 'id'>): Promise<number | undefined> {
   const db = await getDB();
-  const safeItems = JSON.parse(JSON.stringify(sale.items));
+  const safeItems = JSON.parse(JSON.stringify(sale));
   try {
     const id = await db.add(STORE_NAME_SALES, {
-      items: safeItems,
-      coupon: sale.coupon,
+      items: safeItems.items,
+      coupon: safeItems.coupon,
+      totals: safeItems.totals,
       timestamp: sale.timestamp,
     });
     return id as number;
@@ -97,5 +104,24 @@ export async function clearOfflineSales() {
   const db = await getDB();
   const tx = db.transaction(STORE_NAME_SALES, 'readwrite');
   await tx.objectStore(STORE_NAME_SALES).clear();
+  await tx.done;
+}
+
+
+// دوال الطلبات
+export async function saveOrderOffline(order: Order) {
+  const db = await getDB();
+  await db.put(STORE_NAME_ORDERS, order);
+}
+
+export async function getOfflineOrders(): Promise<Order[]> {
+  const db = await getDB();
+  return await db.getAll(STORE_NAME_ORDERS);
+}
+
+export async function clearOfflineOrders() {
+  const db = await getDB();
+  const tx = db.transaction(STORE_NAME_ORDERS, 'readwrite');
+  await tx.objectStore(STORE_NAME_ORDERS).clear();
   await tx.done;
 }

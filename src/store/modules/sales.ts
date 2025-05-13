@@ -12,6 +12,7 @@ import type { Product } from '@/store/modules/products'; // ✅ استخدم ا�
 interface SalePayload {
   items: Product[];
   coupon: string | null;
+  totals: any;
 }
 
 interface SalesState {
@@ -30,16 +31,17 @@ const mutations = {
 
 const actions = {
   async submitSale({ commit }: { commit: Commit }, payload: SalePayload) {
-    const { items, coupon } = payload;
+    const { items, coupon, totals } = payload;
 
     try {
       if (navigator.onLine) {
-        await http.post('/sales', { items, coupon });
+        await http.post('/sales', { items, coupon, totals });
         commit('setSales', items);
       } else {
         await saveSaleOffline({
           items,
           coupon,
+          totals,
           timestamp: Date.now(), // ✅ أضف timestamp عند الحفظ
         });
         commit('setSales', items);
@@ -57,9 +59,11 @@ const actions = {
       const offlineSales = await getOfflineSales();
 
       for (const sale of offlineSales) {
+        const cleanedSale = JSON.parse(JSON.stringify(sale));
         await http.post('/sales', {
-          items: sale.items,
-          coupon: sale.coupon,
+          items: cleanedSale.items,
+          coupon: cleanedSale.coupon,
+          totals: cleanedSale.totals,
         });
         commit('setSales', sale.items);
 

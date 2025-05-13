@@ -3,7 +3,7 @@
     <h2 class="mb-3">الطلبات</h2>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <b-button variant="primary" @click="loadOrders" :disabled="loading">
+      <b-button variant="primary" @click="loadFromAPI" :disabled="loading">
         {{ loading ? 'جاري التحميل...' : 'جلب الطلبات' }}
       </b-button>
       <b-form-input
@@ -39,7 +39,7 @@
         {{ data.item.final_sum }}
       </template>
 
-      <template #cell(id)="data">
+      <template #cell(action)="data">
         <b-button variant="primary" @click="viewInvoice(data.item)">
           عرض التفاصيل
         </b-button>
@@ -56,17 +56,24 @@
 <script setup lang="ts">
 import { useOrders } from '@/composables/useOrders';
 import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-
+import { useStore } from 'vuex';
 const store = useStore();
-const router = useRouter();
-const { orders, loading, error, loadOrders } = useOrders();
 
-// مصطلح البحث
+const {
+  orders,
+  loading,
+  error,
+  loadFromAPI,
+  loadOffline,
+  saveLocally,
+  clearLocal,
+} = useOrders();
+
+const router = useRouter();
 const searchTerm = ref('');
 
-// حقول الجدول
+// الحقول المعروضة في الجدول
 const fields = [
   { key: 'id', label: 'رقم الطلب' },
   { key: 'order_code', label: 'معرف الطلب' },
@@ -76,6 +83,7 @@ const fields = [
   { key: 'status', label: 'الحالة' },
   { key: 'final_sum', label: 'الإجمالي النهائي' },
   { key: 'created_at', label: 'تاريخ الإنشاء' },
+  { key: 'action', label: 'الحدث' },
 ];
 
 // تصفية الطلبات حسب البحث
@@ -96,13 +104,13 @@ const filteredOrders = computed(() => {
   });
 });
 
-// دالة عرض التفاصيل
-function viewInvoice(item: any) {
-  store.dispatch('invoice/setInvoice', item);
-  router.push({ name: 'InvoicePage', params: { id: item.id } });
+// عرض الفاتورة
+function viewInvoice(order: any) {
+  store.dispatch('invoice/setInvoice', order); // تخزين الفاتورة في Vuex
+  router.push({ name: 'InvoicePage', params: { id: order.id } }); // التوجيه لصفحة الفاتورة
 }
 
-// تنسيقات المكونات المساعدة
+// التنسيقات
 const statusLabel = (status: string) => {
   switch (status) {
     case 'PENDING': return 'قيد المعالجة';
@@ -116,7 +124,7 @@ const statusClass = (status: string) => ({
   'text-warning': status === 'PENDING',
   'text-success': status === 'COMPLETED',
   'text-danger': status === 'CANCELLED',
-  'text-muted': !['PENDING','COMPLETED','CANCELLED'].includes(status),
+  'text-muted': !['PENDING', 'COMPLETED', 'CANCELLED'].includes(status),
 });
 
 const formatDate = (dateString: string) => dateString;

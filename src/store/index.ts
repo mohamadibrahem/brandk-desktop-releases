@@ -6,6 +6,7 @@ import products from './modules/products';
 import coupons from './modules/coupons';
 import sales from './modules/sales';
 import invoiceStore from './modules/invoiceStore';
+import orders from './modules/orders';
 
 export default createStore({
     modules: {
@@ -13,6 +14,7 @@ export default createStore({
         coupons,
         sales,
         invoice: invoiceStore,
+        orders
     },
     state: {
       domain: localStorage.getItem('brandk_domain') || null,

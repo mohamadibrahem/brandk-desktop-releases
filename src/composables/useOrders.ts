@@ -1,25 +1,26 @@
-import { ref, onMounted } from 'vue';
-import http from '@/api/http';
+// src/composables/useOrders.ts
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export function useOrders() {
-  const orders = ref<any[]>([]);
-  const loading = ref(false);
-  const error = ref<string | null>(null);
+  const store = useStore();
 
-  async function loadOrders() {
-    loading.value = true;
-    error.value = null;
-    try {
-      const res = await http.get('/orders'); // يفترض أن مسار الـ API هو /orders
-      orders.value = res.data.data;
-    } catch (err: any) {
-      error.value = err.message || 'خطأ أثناء تحميل الطلبات';
-    } finally {
-      loading.value = false;
-    }
-  }
+  const orders = computed(() => store.state.orders.orders); // access from module
+  const loading = computed(() => store.state.orders.loading);
+  const error = computed(() => store.state.orders.error);
 
-  onMounted(loadOrders);
+  const loadFromAPI = () => store.dispatch('orders/loadOrdersFromAPI');
+  const loadOffline = () => store.dispatch('orders/loadOfflineOrders');
+  const saveLocally = (order: any) => store.dispatch('orders/saveOrderLocally', order);
+  const clearLocal = () => store.dispatch('orders/clearLocalOrders');
 
-  return { orders, loading, error, loadOrders };
+  return {
+    orders,
+    loading,
+    error,
+    loadFromAPI,
+    loadOffline,
+    saveLocally,
+    clearLocal,
+  };
 }
