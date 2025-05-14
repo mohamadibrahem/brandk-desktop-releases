@@ -305,6 +305,7 @@
               coupon_discount: totals.value.couponDiscount,
               final_sum: totals.value.finalTotal,
           };
+          submitSale();
           store.dispatch('invoice/setInvoice', payload); // تخزين الفاتورة في Vuex
           router.push({ name: 'InvoicePage', params: { id: 0 } }); // التوجيه لصفحة الفاتورة
         } catch (error) {
