@@ -62,14 +62,13 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "src/assets/img/logo_brandk_icon.ico",
-      "nsis": {
-        "oneClick": false,
-        "allowToChangeInstallationDirectory": true,
-        "perMachine": true,
-        "allowElevation": true,
-        "runLevel": "highestAvailable"
-      }
+      "icon": "src/assets/img/logo_brandk_icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "allowElevation": true
     },
     "mac": {
       "target": "dmg"
