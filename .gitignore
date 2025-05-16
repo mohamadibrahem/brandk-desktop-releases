@@ -1,5 +1,9 @@
 /.env
 /node_modules
 /package-lock.json
-/dist-electron
+*.asar
+/dist-electron/
+/dist/
+/win-unpacked/
+/resources/
 /dist
