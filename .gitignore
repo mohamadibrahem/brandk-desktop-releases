@@ -3,7 +3,6 @@
 /package-lock.json
 *.asar
 /dist-electron/
-/dist/
 /win-unpacked/
 /resources/
 /dist
