@@ -2,7 +2,4 @@
 /node_modules
 /package-lock.json
 /dist-electron
-*.asar
-/dist-electron/win-unpacked/resources/
-/dist-electron/**/app.asar
 /dist
