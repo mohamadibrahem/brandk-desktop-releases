@@ -9,7 +9,8 @@
     "dev": "vite",
     "start": "npm run build:main && electron .",
     "build": "npm run build:main && vite build",
-    "dist": "npm run build:main && vite build && electron-builder"
+    "clean": "rimraf dist-electron dist",
+    "dist": "npm run clean && npm run build:main && vite build && electron-builder"
   },
   "dependencies": {
     "axios": "^1.9.0",
@@ -42,8 +43,12 @@
       "output": "dist-electron"
     },
     "files": [
-      "dist/",
-      "dist/main/main.js"
+      "dist/main/**/*",
+      "dist/**/*",
+      "!**/*.ts",
+      "!**/*.vue",
+      "!**/node_modules/**",
+      "!**/app.asar"
     ],
     "extraResources": [
       "src/assets/img/logo_brandk_icon.ico",
@@ -56,20 +61,19 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "your-github-username",
-        "repo": "your-repo-name"
+        "owner": "mohamadibrahem",
+        "repo": "brandk-desktop-releases"
       }
     ],
     "win": {
       "target": "nsis",
-      "icon": "src/assets/img/logo_brandk_icon.ico",
-      "nsis": {
-        "oneClick": false,
-        "allowToChangeInstallationDirectory": true,
-        "perMachine": true,
-        "allowElevation": true,
-        "runLevel": "highestAvailable"
-      }
+      "icon": "src/assets/img/logo_brandk_icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "allowElevation": true
     },
     "mac": {
       "target": "dmg"
