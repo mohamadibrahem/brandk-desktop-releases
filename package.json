@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "Brandk Desktop App for Online Selling",
   "author": "brandk-online",
-  "main": "dist/main/main.js",
+  "main": "dist-electron/main/main.js",
   "scripts": {
-    "build:main": "tsc -p tsconfig.main.json",
-    "dev": "vite",
-    "start": "npm run build:main && electron .",
-    "build": "npm run build:main && vite build",
     "clean": "rimraf dist-electron dist",
-    "dist": "npm run clean && npm run build:main && vite build && electron-builder"
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:web": "vite build",
+    "build:electron": "npm run clean && npm run build:main && vite build && electron-builder",
+    "dev:web": "vite",
+    "dev:electron": "concurrently \"vite\" \"wait-on http://127.0.0.1:3000 && npm run start:electron\"",
+    "start:electron": "npm run build:main && electron ."
   },
   "dependencies": {
     "axios": "^1.9.0",
@@ -25,37 +26,38 @@
     "vue": "^3.5.13",
     "vue-qrcode-reader": "^5.7.2",
     "vue-router": "^4.5.1",
+    "electron-updater": "^6.6.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.6.2",
+    "concurrently": "^8.2.2",
     "electron": "^24.0.0",
     "electron-builder": "^26.0.12",
-    "electron-updater": "^6.6.2",
+    "rimraf": "^5.0.5",
     "typescript": "^4.9.5",
     "vite": "^5.0.0",
-    "vite-plugin-static-copy": "^3.0.0"
+    "vite-plugin-static-copy": "^3.0.0",
+    "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.brandk.online",
     "productName": "BrandK Online",
     "directories": {
-      "output": "dist-electron"
+      "output": "dist-electron",
+      "buildResources": "build"
     },
     "files": [
-      "dist/main/**/*",
       "dist/**/*",
-      "!**/*.ts",
-      "!**/*.vue",
-      "!**/node_modules/**",
-      "!**/app.asar"
+      "dist-electron/main/**/*"
     ],
     "extraResources": [
-      "src/assets/img/logo_brandk_icon.ico",
       {
         "from": "src/assets/fonts",
         "to": "assets/fonts",
-        "filter": ["**/*.ttf"]
+        "filter": [
+          "**/*.ttf"
+        ]
       }
     ],
     "publish": [
@@ -76,7 +78,8 @@
       "allowElevation": true
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "src/assets/img/logo_brandk_icon.icns"
     }
   }
 }

@@ -4,9 +4,10 @@ import { resolve } from 'path';
 
 export default defineConfig({
   assetsInclude: ['**/*.ttf', '**/*.woff', '**/*.woff2'],
+  base: './',
   plugins: [
     vue(),
-],
+  ],
   resolve: {
     alias: { '@': resolve(__dirname, 'src') }
   },

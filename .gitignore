@@ -1,8 +1,6 @@
 /.env
 /node_modules
 /package-lock.json
-*.asar
 /dist-electron/
-/win-unpacked/
-/resources/
 /dist
+publish-release.ps1
