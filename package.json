@@ -1,6 +1,6 @@
 {
   "name": "brandk-online",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Brandk Desktop App for Online Selling",
   "author": "brandk-online",
   "main": "dist-electron/main/main.js",
@@ -8,8 +8,8 @@
     "clean": "rimraf dist-electron dist",
     "build:main": "tsc -p tsconfig.main.json",
     "build:web": "vite build",
-    "build:electron": "npm run clean && npm run build:main && vite build && electron-builder",
-    "build:electron:publish": "npm run clean && npm run build:main && npm run build:web && electron-builder --publish always",
+    "build:electron": "npm run clean && npm run build:main && npm run build:web && electron-builder --win dir --publish never && node scripts/apply-win-icon.mjs && electron-builder --win nsis --prepackaged dist-electron/win-unpacked --publish never",
+    "build:electron:publish": "npm run clean && npm run build:main && npm run build:web && electron-builder --win dir --publish never && node scripts/apply-win-icon.mjs && electron-builder --win nsis --prepackaged dist-electron/win-unpacked --publish always",
     "dev:web": "vite --host 127.0.0.1 --strictPort",
     "dev:electron": "concurrently \"npm run dev:web\" \"wait-on http://127.0.0.1:3000 && set ELECTRON_START_URL=http://127.0.0.1:3000&& npm run start:electron\"",
     "postinstall": "electron-builder install-app-deps",
@@ -70,6 +70,10 @@
       "output": "dist-electron",
       "buildResources": "build"
     },
+    "electronLanguages": [
+      "en-US",
+      "ar"
+    ],
     "files": [
       "dist/**/*",
       "dist-electron/main/**/*"
@@ -95,13 +99,20 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "src/assets/img/logo_brandk_icon.ico"
+      "icon": "src/assets/img/logo_brandk_icon.ico",
+      "signAndEditExecutable": false
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": true,
       "allowElevation": true,
+      "installerIcon": "src/assets/img/logo_brandk_icon.ico",
+      "uninstallerIcon": "src/assets/img/logo_brandk_icon.ico",
+      "installerHeaderIcon": "src/assets/img/logo_brandk_icon.ico",
+      "shortcutName": "BrandK Online",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
       "include": "build/installer.nsh"
     },
     "mac": {
