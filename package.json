@@ -1,6 +1,6 @@
 {
   "name": "brandk-online",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "Brandk Desktop App for Online Selling",
   "author": "brandk-online",
   "main": "dist-electron/main/main.js",
@@ -18,7 +18,7 @@
     "release:preflight": "node scripts/release-preflight.mjs",
     "release:build": "npm run release:check && npm run build:electron && npm run release:preflight",
     "release:publish": "npm run release:build && npm run release:branch",
-    "release:branch": "powershell -ExecutionPolicy Bypass -File .\\publish-release-to-release-branch.ps1",
+    "release:branch": "powershell -ExecutionPolicy Bypass -File .\\publish-release-assets.ps1",
     "version:patch": "npm version patch --no-git-tag-version",
     "version:minor": "npm version minor --no-git-tag-version",
     "version:major": "npm version major --no-git-tag-version"

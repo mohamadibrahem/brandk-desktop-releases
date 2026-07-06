@@ -1,8 +1,8 @@
-version: 1.1.12
+version: 1.1.13
 files:
-  - url: https://github.com/mohamadibrahem/brandk-desktop-releases/releases/download/v1.1.12/BrandK-Online-Setup-1.1.12.exe
-    sha512: r0trztvoXrtdsp51sMzJzth5FJPLfjtcs77dfkRJscwhGXSLjepUNRhT9onuUHnNYTWNwkt/lbqcQJ3BtQtUtQ==
-    size: 86114517
-path: https://github.com/mohamadibrahem/brandk-desktop-releases/releases/download/v1.1.12/BrandK-Online-Setup-1.1.12.exe
-sha512: r0trztvoXrtdsp51sMzJzth5FJPLfjtcs77dfkRJscwhGXSLjepUNRhT9onuUHnNYTWNwkt/lbqcQJ3BtQtUtQ==
-releaseDate: '2026-07-06T01:20:20.623Z'
+  - url: https://github.com/mohamadibrahem/brandk-desktop-releases/releases/download/v1.1.13/BrandK-Online-Setup-1.1.13.exe
+    sha512: uOnr3TcAOXRJuESYS3EC0xFezZP0NIEGTo+UwTWrbtpv/ywo5fRhnbk3cseaTgoSq28lAAaZu4eLENpQKBSQvg==
+    size: 86114756
+path: https://github.com/mohamadibrahem/brandk-desktop-releases/releases/download/v1.1.13/BrandK-Online-Setup-1.1.13.exe
+sha512: uOnr3TcAOXRJuESYS3EC0xFezZP0NIEGTo+UwTWrbtpv/ywo5fRhnbk3cseaTgoSq28lAAaZu4eLENpQKBSQvg==
+releaseDate: '2026-07-06T02:13:50.952Z'
