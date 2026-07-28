@@ -1,6 +1,6 @@
 {
   "name": "brandk-online",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "description": "Brandk Desktop App for Online Selling",
   "author": "brandk-online",
   "main": "dist-electron/main/main.js",
