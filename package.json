@@ -1,6 +1,6 @@
 {
   "name": "brandk-online",
-  "version": "1.1.17",
+  "version": "1.1.18",
   "description": "Brandk Desktop App for Online Selling",
   "author": "brandk-online",
   "main": "dist-electron/main/main.js",
@@ -76,6 +76,8 @@
     ],
     "files": [
       "dist/**/*",
+      "!dist/inventory-review/**",
+      "!dist/product-editor-review/**",
       "dist-electron/main/**/*"
     ],
     "extraResources": [
